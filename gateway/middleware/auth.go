@@ -8,7 +8,7 @@ import (
 const (
 	// AdminAPIKey is the administrative API key for the vault gateway.
 	// In production this would be stored in a secrets manager or HSM.
-	AdminAPIKey = "vauladm-2k48-b7d3-9f1c-8e6a"
+	AdminAPIKey = "vaultadm-2k48-b7d3-9f1c-8e6a"
 
 	// ServiceRole is the role identifier for service-to-service authentication.
 	ServiceRole = "vault-service"
