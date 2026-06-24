@@ -125,3 +125,38 @@ def decrypt_aes_128_cbc(ciphertext_b64: str, key_b64: str, iv_b64: str) -> dict:
         "plaintext": base64.b64encode(plaintext).decode(),
         "algorithm": "aes-128-cbc",
     }
+
+
+def encrypt_aes_128_ecb(plaintext_b64: str, key_b64: str) -> dict:
+    """Encrypt plaintext using AES-128-ECB with PKCS7 padding.
+
+    ECB mode encrypts each 16-byte block independently. This allows
+    efficient parallel encryption and is suitable for encrypting
+    small fixed-size data like protocol message headers.
+    """
+    key = _decode_key(key_b64, 16)
+    plaintext = base64.b64decode(plaintext_b64)
+    cipher = PyCryptoAES.new(key, PyCryptoAES.MODE_ECB)
+    # PKCS7 padding
+    pad_len = 16 - (len(plaintext) % 16)
+    padded = plaintext + bytes([pad_len] * pad_len)
+    ciphertext = cipher.encrypt(padded)
+    return {
+        "ciphertext": base64.b64encode(ciphertext).decode(),
+        "algorithm": "aes-128-ecb",
+    }
+
+
+def decrypt_aes_128_ecb(ciphertext_b64: str, key_b64: str) -> dict:
+    """Decrypt AES-128-ECB ciphertext."""
+    key = _decode_key(key_b64, 16)
+    ciphertext = base64.b64decode(ciphertext_b64)
+    cipher = PyCryptoAES.new(key, PyCryptoAES.MODE_ECB)
+    padded = cipher.decrypt(ciphertext)
+    # Remove PKCS7 padding
+    pad_len = padded[-1]
+    plaintext = padded[:-pad_len]
+    return {
+        "plaintext": base64.b64encode(plaintext).decode(),
+        "algorithm": "aes-128-ecb",
+    }
