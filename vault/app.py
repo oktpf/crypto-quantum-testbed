@@ -16,6 +16,8 @@ from crypto.aes import (
     decrypt_aes_256_gcm,
     encrypt_aes_128_cbc,
     decrypt_aes_128_cbc,
+    encrypt_aes_128_ecb,
+    decrypt_aes_128_ecb,
 )
 from crypto.chacha import encrypt_chacha20, decrypt_chacha20
 from crypto.legacy import (
@@ -42,7 +44,7 @@ def health():
         "version": "1.0.0",
         "supported_symmetric": [
             "aes-128-gcm", "aes-256-gcm", "chacha20-poly1305",
-            "aes-128-cbc", "des", "3des", "rc4",
+            "aes-128-cbc", "aes-128-ecb", "des", "3des", "rc4",
         ],
         "supported_hashes": ["sha-256", "sha-384", "sha-512", "md5", "sha-1"],
         "supported_hmac": ["hmac-sha256", "hmac-md5"],
@@ -77,6 +79,8 @@ def encrypt():
             result = encrypt_chacha20(plaintext, key)
         elif algorithm == "aes-128-cbc":
             result = encrypt_aes_128_cbc(plaintext, key, iv)
+        elif algorithm == "aes-128-ecb":
+            result = encrypt_aes_128_ecb(plaintext, key)
         elif algorithm == "des":
             result = encrypt_des(plaintext, key)
         elif algorithm == "3des":
@@ -115,6 +119,8 @@ def decrypt():
             result = decrypt_chacha20(ciphertext, key, nonce, tag)
         elif algorithm == "aes-128-cbc":
             result = decrypt_aes_128_cbc(ciphertext, key, iv)
+        elif algorithm == "aes-128-ecb":
+            result = decrypt_aes_128_ecb(ciphertext, key)
         elif algorithm == "des":
             result = decrypt_des(ciphertext, key)
         elif algorithm == "3des":
